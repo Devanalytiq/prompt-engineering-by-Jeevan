@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Engineering with GenAI for RPA Teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d2236;--ink2:#1b3a57;--text:#2c3e50;--mute:#64788c;--paper:#f5f6f8;--card:#fff;--line:#dfe4ea;--teal:#0e6b72;--tealbg:#e6f2f3;--brass:#a8844a;--brassbg:#f6efe2;--code:#0d2236}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font:400 16px/1.65 "IBM Plex Sans",system-ui,sans-serif;color:var(--text);background:var(--paper)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;overflow:auto;background:var(--ink);color:#c9d6e2;padding:40px 28px}
+aside h2{font:600 22px/1.25 Newsreader,Georgia,serif;color:#fff;margin-bottom:6px}
+aside p{font-size:13px;color:#8fa6bb;margin-bottom:28px}
+aside nav a{display:flex;gap:12px;padding:9px 10px;margin:0 -10px;border-radius:6px;font-size:14px;line-height:1.4;border-left:2px solid transparent}
+aside nav a b{color:var(--brass);font-weight:500;min-width:20px;font-variant-numeric:tabular-nums}
+aside nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+main{padding:0 min(6vw,72px) 80px;max-width:1040px}
+.hero{padding:72px 0 48px;border-bottom:1px solid var(--line);margin-bottom:56px}
+.hero h1{font:600 clamp(34px,5vw,54px)/1.1 Newsreader,Georgia,serif;color:var(--ink);letter-spacing:-.01em;max-width:16em}
+.hero p{margin-top:18px;max-width:38em;color:var(--mute);font-size:18px}
+.path{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;font-size:13px}
+.path span{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:4px 10px;color:var(--ink2)}
+section.t{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:40px;overflow:hidden}
+.th{display:flex;gap:20px;align-items:flex-start;padding:32px 36px 24px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#fafbfc)}
+.num{font:600 44px/1 Newsreader,Georgia,serif;color:var(--brass);min-width:56px}
+.th h2{font:600 28px/1.2 Newsreader,Georgia,serif;color:var(--ink)}
+.th p{color:var(--mute);font-size:14px;margin-top:6px}
+.tb{padding:8px 36px 32px}
+.blk{padding-top:24px}
+h3{font:600 13px/1.4 "IBM Plex Sans",sans-serif;color:var(--teal);margin-bottom:10px}
+.blk>p,.blk li{max-width:46em}
+ul.pl{list-style:none}
+ul.pl li{padding-left:18px;position:relative;margin:4px 0}
+ul.pl li:before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--brass)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{background:var(--tealbg);color:var(--teal);font-size:14px;font-weight:500;padding:4px 12px;border-radius:999px}
+pre{background:var(--code);color:#dbe7f2;font:400 13.5px/1.7 "IBM Plex Mono",ui-monospace,monospace;padding:18px 22px;border-radius:8px;overflow-x:auto}
+pre i{font-style:normal;color:#e0bd84}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.flow{list-style:none;display:flex;flex-wrap:wrap;gap:6px 0;align-items:stretch}
+.flow li{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-size:14px;font-weight:500;color:var(--ink2);margin-right:28px}
+.flow li:not(:last-child):after{content:"";position:absolute;right:-22px;top:50%;width:16px;height:2px;background:var(--brass);transform:translateY(-50%)}
+.flow li:not(:last-child):before{content:"";position:absolute;right:-23px;top:50%;border:5px solid transparent;border-left:7px solid var(--brass);border-right:0;transform:translateY(-50%)}
+.flow.rpa li{background:var(--brassbg);border-color:#e6d7b8}
+.flow .end{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rpa-box{background:var(--brassbg);border:1px solid #e6d7b8;border-radius:8px;padding:18px 22px;margin-top:24px}
+.rpa-box h3{color:#7d5f2c}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{background:var(--paper);color:var(--ink2);font-weight:600}
+.ok{color:#14733f;font-weight:600}.bad{color:#b3372f;font-weight:600}
+.take{margin-top:28px;border-left:3px solid var(--teal);background:var(--tealbg);padding:16px 22px;border-radius:0 8px 8px 0}
+.take h3{color:var(--ink)}
+footer{color:var(--mute);font-size:13px;text-align:center;padding-top:16px}
+@media(max-width:900px){.layout{display:block}aside{position:static;height:auto;padding:28px 24px}aside nav{display:none}.cols{grid-template-columns:1fr}.th,.tb{padding-left:22px;padding-right:22px}.th{flex-direction:column;gap:6px}}
+@media print{aside{display:none}.layout{display:block}section.t{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+<h2>Prompt Engineering with GenAI</h2>
+<p>A ten-topic curriculum for RPA teams</p>
+<nav>
+<a href="#t1"><b>1</b>Introduction to Generative AI &amp; LLMs</a>
+<a href="#t2"><b>2</b>Prompt Fundamentals &amp; Anatomy</a>
+<a href="#t3"><b>3</b>Prompting Techniques</a>
+<a href="#t4"><b>4</b>Context, Constraints &amp; Instructions</a>
+<a href="#t5"><b>5</b>Structured Output &amp; Templates</a>
+<a href="#t6"><b>6</b>Advanced Prompting &amp; Decomposition</a>
+<a href="#t7"><b>7</b>Prompt Engineering for RPA</a>
+<a href="#t8"><b>8</b>Evaluation &amp; Optimization</a>
+<a href="#t9"><b>9</b>RAG, Tools &amp; AI Agents</a>
+<a href="#t10"><b>10</b>Security &amp; End-to-End Project</a>
+</nav>
+</aside>
+<main>
+<header class="hero">
+<h1>From first prompt to production RPA workflow</h1>
+<p>Ten topics that take your team from GenAI basics to a complete, secure UiPath automation powered by an LLM.</p>
+<div class="path"><span>Definition</span><span>Types &amp; concepts</span><span>Syntax / template</span><span>Example</span><span>RPA real-time example</span><span>Flow diagram</span><span>Key takeaways</span></div>
+</header>
+
+<section class="t" id="t1">
+<div class="th"><div class="num">1</div><div><h2>Introduction to Generative AI &amp; LLMs</h2><p>What GenAI, LLMs, tokens, context and prompts are</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>Generative AI creates new content such as text, code and images. A Large Language Model (LLM) is a model that reads a prompt and generates a response one token at a time.</p></div>
+<div class="blk"><h3>Concepts</h3><div class="chips"><span>Generative AI</span><span>LLM</span><span>Tokens</span><span>Context window</span><span>Model</span><span>Prompt</span><span>Response</span></div></div>
+<div class="blk"><h3>Simple flow</h3><ol class="flow"><li>User</li><li>Prompt</li><li>LLM</li><li>Token processing</li><li class="end">Generated response</li></ol></div>
+<div class="rpa-box"><h3>RPA real-time example</h3><ol class="flow rpa"><li>Invoice PDF</li><li>UiPath</li><li>LLM</li><li>Extract invoice number</li><li>JSON</li><li class="end">Excel / SAP</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>An LLM turns your instructions into output by predicting tokens.</li><li>The context window limits how much input and output fit in one call.</li></ul></div>
+</div></section>
+
+<section class="t" id="t2">
+<div class="th"><div class="num">2</div><div><h2>Prompt Fundamentals &amp; Anatomy</h2><p>Components of a good prompt and prompt structure. The core topic of the session.</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>A prompt is an instruction or input provided to an AI model to guide the response you want.</p></div>
+<div class="blk"><h3>Prompt anatomy</h3><ol class="flow"><li>Role</li><li>Task</li><li>Context</li><li>Constraints</li><li class="end">Output format</li></ol></div>
+<div class="blk"><h3>Example</h3><pre><i>Role:</i> You are an experienced UiPath developer.
+<i>Task:</i> Explain REFramework.
+<i>Context:</i> The audience has basic RPA knowledge.
+<i>Constraints:</i> Use simple language and a practical example.
+<i>Output:</i> Give 5 bullet points.</pre></div>
+<div class="blk"><h3>Flow</h3><ol class="flow"><li>Role</li><li>Task</li><li>Context</li><li>Constraints</li><li>Output format</li><li class="end">Better response</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Role + Task + Context + Constraints + Output Format is a formula anyone can use immediately.</li><li>Each missing component is a place where the model has to guess.</li></ul></div>
+</div></section>
+
+<section class="t" id="t3">
+<div class="th"><div class="num">3</div><div><h2>Prompting Techniques</h2><p>Zero-shot, one-shot, few-shot and role prompting</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Types</h3><div class="chips"><span>Zero-shot</span><span>One-shot</span><span>Few-shot</span><span>Role prompting</span><span>Instruction prompting</span><span>Example-based prompting</span></div></div>
+<div class="blk cols">
+<div><h3>Zero-shot</h3><pre>Classify this email as
+Urgent or Normal.</pre></div>
+<div><h3>One-shot</h3><pre>Example:
+"Server is down" → Urgent
+
+Now classify:
+"Password expires tomorrow"</pre></div></div>
+<div class="blk"><h3>Few-shot</h3><p>Give 2 to 5 examples before the actual task so the model copies the pattern.</p></div>
+<div class="blk"><h3>Comparison</h3><ol class="flow"><li>Zero-shot: no examples</li><li>One-shot: 1 example</li><li class="end">Few-shot: multiple examples</li></ol></div>
+<div class="rpa-box"><h3>RPA real-time example</h3><p>Classify incoming service-request emails into one of four categories.</p><div class="chips" style="margin-top:10px"><span>Access Request</span><span>Password Issue</span><span>Application Issue</span><span>Other</span></div></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>More examples usually mean more consistent output.</li><li>Use few-shot when category boundaries are subtle.</li></ul></div>
+</div></section>
+
+<section class="t" id="t4">
+<div class="th"><div class="num">4</div><div><h2>Context, Constraints &amp; Instructions</h2><p>How to control model behavior and improve accuracy</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>Relevant context and explicit constraints help the model understand what to do and what not to do.</p></div>
+<div class="blk"><h3>Concepts</h3><div class="chips"><span>Context</span><span>Constraints</span><span>Positive instructions</span><span>Negative instructions</span><span>Delimiters</span><span>Scope</span><span>Tone</span><span>Audience</span></div></div>
+<div class="blk cols">
+<div><h3>Weak prompt</h3><pre>Summarize this document.</pre></div>
+<div><h3>Controlled prompt</h3><pre>Summarize the document in
+5 bullet points.
+
+Rules:
+- Maximum 100 words
+- Use simple English
+- Don't add information not
+  present in the document</pre></div></div>
+<div class="blk"><h3>Flow</h3><ol class="flow"><li>Raw input</li><li>Add context</li><li>Add constraints</li><li>Add instructions</li><li class="end">Controlled output</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Say what to do and what to avoid.</li><li>Use delimiters to separate instructions from the data.</li></ul></div>
+</div></section>
+
+<section class="t" id="t5">
+<div class="th"><div class="num">5</div><div><h2>Structured Output &amp; Prompt Templates</h2><p>JSON, tables, schemas and reusable prompts</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>Structured prompting makes the model return information in a predictable format that downstream applications can consume.</p></div>
+<div class="blk"><h3>Types</h3><div class="chips"><span>Plain text</span><span>Markdown</span><span>Table</span><span>JSON</span><span>XML</span><span>Schema-based output</span></div></div>
+<div class="blk"><h3>Template</h3><pre>Extract the following information:
+
+{
+  "customer_name": "",
+  "invoice_number": "",
+  "invoice_date": "",
+  "total_amount": ""
+}</pre></div>
+<div class="rpa-box"><h3>RPA real-time example</h3><ol class="flow rpa"><li>Email</li><li>LLM</li><li>JSON</li><li>Deserialize JSON</li><li>UiPath variables</li><li class="end">Excel / SAP / App</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Automation needs predictable output, and free text breaks workflows.</li><li>Reusable templates keep prompts consistent across bots.</li></ul></div>
+</div></section>
+
+<section class="t" id="t6">
+<div class="th"><div class="num">6</div><div><h2>Advanced Prompting &amp; Task Decomposition</h2><p>Breaking complex tasks into reliable steps</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>Complex tasks are divided into smaller, clearly defined tasks to improve reliability and maintainability.</p></div>
+<div class="blk cols">
+<div><h3>Instead of</h3><pre>Analyze this customer email.</pre></div>
+<div><h3>Break it into</h3><pre>1. Identify customer issue
+2. Determine category
+3. Determine priority
+4. Extract important info
+5. Recommend action</pre></div></div>
+<div class="blk"><h3>Flow</h3><ol class="flow"><li>Complex task</li><li>Break into subtasks</li><li>Task 1 → 2 → 3</li><li>Combine results</li><li class="end">Final output</li></ol></div>
+<div class="rpa-box"><h3>RPA real-time example: process incoming claims</h3><ol class="flow rpa"><li>Email</li><li>Extract claim ID</li><li>Classify claim</li><li>Check priority</li><li>Generate summary</li><li class="end">Update queue</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Small prompts are easier to test, debug and reuse.</li><li>Each subtask can be validated before the next one runs.</li></ul></div>
+</div></section>
+
+<section class="t" id="t7">
+<div class="th"><div class="num">7</div><div><h2>Prompt Engineering for RPA &amp; Automation</h2><p>How prompts fit into UiPath, API and Python workflows. The signature topic for this team.</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Architecture</h3><ol class="flow"><li>UiPath</li><li>Build prompt</li><li>LLM / API</li><li>Structured output</li><li>Validate response</li><li>UiPath workflow</li><li class="end">Excel / SAP / Web / Email</li></ol></div>
+<div class="blk"><h3>Concepts</h3><div class="chips"><span>LLM API</span><span>HTTP request</span><span>Dynamic prompts</span><span>Variables</span><span>JSON response</span><span>Error handling</span><span>Validation</span><span>Human-in-the-loop</span></div></div>
+<div class="rpa-box"><h3>Real example</h3><ol class="flow rpa"><li>Email</li><li>AI classification</li><li class="end">UiPath queue</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Build prompts dynamically from variables, and never trust the response blindly.</li><li>Add error handling and a human review path for low-confidence results.</li></ul></div>
+</div></section>
+
+<section class="t" id="t8">
+<div class="th"><div class="num">8</div><div><h2>Prompt Evaluation &amp; Optimization</h2><p>Testing, accuracy, consistency, edge cases and improving prompts</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Definition</h3><p>Prompt evaluation means systematically testing prompts against expected results and improving them based on performance.</p></div>
+<div class="blk"><h3>Concepts</h3><div class="chips"><span>Accuracy</span><span>Consistency</span><span>Edge cases</span><span>Test datasets</span><span>Prompt comparison</span><span>Iteration</span><span>Hallucination checking</span></div></div>
+<div class="blk"><h3>Example test table</h3><div style="overflow-x:auto"><table><tr><th>Test case</th><th>Expected</th><th>Prompt A</th><th>Prompt B</th></tr>
+<tr><td>Email 1</td><td>Urgent</td><td class="ok">Urgent</td><td class="ok">Urgent</td></tr>
+<tr><td>Email 2</td><td>Normal</td><td class="bad">Urgent</td><td class="ok">Normal</td></tr>
+<tr><td>Email 3</td><td>Low</td><td class="ok">Low</td><td class="ok">Low</td></tr></table></div></div>
+<div class="blk"><h3>Improvement cycle</h3><ol class="flow"><li>Create prompt</li><li>Test</li><li>Evaluate</li><li>Identify failure</li><li>Modify prompt</li><li class="end">Retest</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Prompt engineering is an engineering discipline, not just asking ChatGPT questions.</li><li>Keep a test dataset and re-run it after every prompt change.</li></ul></div>
+</div></section>
+
+<section class="t" id="t9">
+<div class="th"><div class="num">9</div><div><h2>RAG, Tools &amp; AI Agents</h2><p>How prompting connects with enterprise knowledge and tools. Keep it conceptual.</p></div></div>
+<div class="tb">
+<div class="blk"><h3>RAG: Retrieval-Augmented Generation</h3><ol class="flow"><li>User question</li><li>Search knowledge base</li><li>Retrieve relevant information</li><li>LLM</li><li class="end">Answer</li></ol><div class="chips" style="margin-top:12px"><span>Documents</span><span>Embeddings</span><span>Vector database</span><span>Retrieval</span><span>Context injection</span></div></div>
+<div class="blk"><h3>Tools / function calling</h3><ol class="flow"><li>User</li><li>LLM</li><li>Decides tool needed</li><li>API / database / app</li><li>Tool result</li><li>LLM</li><li class="end">Final response</li></ol></div>
+<div class="blk"><h3>AI agents</h3><ol class="flow"><li>Goal</li><li>Plan</li><li>Use tools</li><li>Observe result</li><li>Next action</li><li class="end">Complete task</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>RAG grounds answers in your own documents.</li><li>Tools let the model act, and agents repeat plan, act and observe until the goal is met.</li></ul></div>
+</div></section>
+
+<section class="t" id="t10">
+<div class="th"><div class="num">10</div><div><h2>Prompt Security &amp; End-to-End RPA Project</h2><p>Prompt injection, data protection, guardrails and a complete use case</p></div></div>
+<div class="tb">
+<div class="blk"><h3>Part A: Prompt security</h3><div class="chips"><span>Prompt injection</span><span>Sensitive data</span><span>Data leakage</span><span>Jailbreaking</span><span>Excessive permissions</span><span>Output validation</span><span>Guardrails</span></div></div>
+<div class="blk"><h3>The risk</h3><ol class="flow"><li>User input</li><li>Potentially malicious instruction</li><li>Prompt injection</li><li class="end">Model</li></ol></div>
+<div class="blk"><h3>Reducing the risk</h3><ol class="flow"><li>Input validation</li><li>Clear instructions</li><li>Data separation</li><li>Output validation</li><li class="end">Restricted tools</li></ol></div>
+<div class="rpa-box"><h3>Part B: Intelligent Email Processing Bot</h3><ol class="flow rpa"><li>Email</li><li>Extract email body</li><li>Build prompt</li><li>LLM / API</li><li>Category + Priority</li><li>JSON output</li><li>Validate result</li><li>UiPath workflow</li><li class="end">Queue / Excel / Email</li></ol></div>
+<div class="blk"><h3>What the project demonstrates</h3><ol class="flow"><li>Prompt</li><li>Context</li><li>Few-shot</li><li>Constraints</li><li>JSON</li><li>API</li><li>Validation</li><li class="end">RPA</li></ol></div>
+<div class="take"><h3>Key takeaways</h3><ul class="pl"><li>Treat all input as untrusted, and separate instructions from data.</li><li>Validate every output and give the model only the permissions it needs.</li></ul></div>
+</div></section>
+<footer>Prompt Engineering with GenAI for RPA Teams</footer>
+</main>
+</div>
+</body>
+</html>
